@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList from "./TodoList";
 import {v1} from "uuid";
+import {AddItemForm} from "./AddItemForm";
 
 
 export type TaskType = {
@@ -70,6 +71,15 @@ function App() {
             setTasks({...tasks})
         }
     }
+    function changeTaskTitle(taskD: string, newTitle: string, todoListID: string ) {
+        const task = tasks[todoListID].find(t => t.id === taskD)
+        // false -> undefined, null, 0, "", NaN
+        // true -> {}, []
+        if (task) {
+            task.title = newTitle
+            setTasks({...tasks})
+        }
+    }
     function changeTodoListFilter(newFilterValue: FilterValuesType, todoListID: string ) {
         const todoList = todoLists.find( t => t.id === todoListID)
         if(todoList) {
@@ -78,9 +88,23 @@ function App() {
         }
 
     }
+    function changeTodoListTitle(newTitle: string, todoListID: string ) {
+        const todoList = todoLists.find( t => t.id === todoListID)
+        if(todoList) {
+            todoList.title = newTitle
+            setTodoLists([...todoLists])
+        }
+
+    }
     function removeTodoList(todoListID: string) {
         setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
         delete tasks[todoListID]
+    }
+    function addTodoList(title: string) {
+        const newTodoListID = v1()
+        const newTodoList: TodoListType = {id: newTodoListID, title: title, filter: "all"}
+        setTodoLists([...todoLists, newTodoList])
+        setTasks({...tasks, [newTodoListID]: []})
     }
 
 
@@ -100,7 +124,10 @@ function App() {
                          removeTask={removeTask}
                          changeTodoListFilter={changeTodoListFilter}
                          changeTaskStatus={changeTaskStatus}
-                         removeTodoList={removeTodoList}/>
+                         removeTodoList={removeTodoList}
+                         changeTaskTitle={changeTaskTitle}
+                         changeTodoListTitle={changeTodoListTitle}
+        />
 
     } )
 
@@ -108,6 +135,7 @@ function App() {
     //CRUD - Create Read Update Delete
     return (
         <div className="App">
+            <AddItemForm addItem={addTodoList}/>
             {todoListComponents}
         </div>
     );
