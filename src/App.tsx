@@ -3,6 +3,8 @@ import './App.css';
 import TodoList from "./TodoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
+import {Menu} from "@material-ui/icons";
 
 
 export type TaskType = {
@@ -53,6 +55,7 @@ function App() {
         // какой-то новый массив, дайка я запущу перерисовку, а если мы передали бы просто {tasks}, без трех точек, то перерисовка бы не запустилась
         // так как setTasks подумал бы, чтобы раз объект тот же, значит нихрена не изменилось
     }
+
     function addTask(title: string, todoListID: string) {
         const newTask: TaskType = {
             id: v1(),
@@ -62,7 +65,8 @@ function App() {
         tasks[todoListID] = [newTask, ...tasks[todoListID]]
         setTasks({...tasks})
     }
-    function changeTaskStatus(taskD: string, newIsDoneValue: boolean, todoListID: string ) {
+
+    function changeTaskStatus(taskD: string, newIsDoneValue: boolean, todoListID: string) {
         const task = tasks[todoListID].find(t => t.id === taskD)
         // false -> undefined, null, 0, "", NaN
         // true -> {}, []
@@ -71,7 +75,8 @@ function App() {
             setTasks({...tasks})
         }
     }
-    function changeTaskTitle(taskD: string, newTitle: string, todoListID: string ) {
+
+    function changeTaskTitle(taskD: string, newTitle: string, todoListID: string) {
         const task = tasks[todoListID].find(t => t.id === taskD)
         // false -> undefined, null, 0, "", NaN
         // true -> {}, []
@@ -80,26 +85,30 @@ function App() {
             setTasks({...tasks})
         }
     }
-    function changeTodoListFilter(newFilterValue: FilterValuesType, todoListID: string ) {
-        const todoList = todoLists.find( t => t.id === todoListID)
-        if(todoList) {
+
+    function changeTodoListFilter(newFilterValue: FilterValuesType, todoListID: string) {
+        const todoList = todoLists.find(t => t.id === todoListID)
+        if (todoList) {
             todoList.filter = newFilterValue
             setTodoLists([...todoLists])
         }
 
     }
-    function changeTodoListTitle(newTitle: string, todoListID: string ) {
-        const todoList = todoLists.find( t => t.id === todoListID)
-        if(todoList) {
+
+    function changeTodoListTitle(newTitle: string, todoListID: string) {
+        const todoList = todoLists.find(t => t.id === todoListID)
+        if (todoList) {
             todoList.title = newTitle
             setTodoLists([...todoLists])
         }
 
     }
+
     function removeTodoList(todoListID: string) {
         setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
         delete tasks[todoListID]
     }
+
     function addTodoList(title: string) {
         const newTodoListID = v1()
         const newTodoList: TodoListType = {id: newTodoListID, title: title, filter: "all"}
@@ -108,7 +117,7 @@ function App() {
     }
 
 
-    const todoListComponents = todoLists.map( (tl) => {
+    const todoListComponents = todoLists.map((tl) => {
         let tasksForTodoList = tasks[tl.id];
         if (tl.filter === "active") {
             tasksForTodoList = tasksForTodoList.filter(t => t.isDone === false)
@@ -116,27 +125,52 @@ function App() {
         if (tl.filter === "completed") {
             tasksForTodoList = tasksForTodoList.filter(t => t.isDone === true)
         }
-        return <TodoList todoListID={tl.id}
-                         title={tl.title}
-                         filter={tl.filter}
-                         tasks={tasksForTodoList}
-                         addTask={addTask}
-                         removeTask={removeTask}
-                         changeTodoListFilter={changeTodoListFilter}
-                         changeTaskStatus={changeTaskStatus}
-                         removeTodoList={removeTodoList}
-                         changeTaskTitle={changeTaskTitle}
-                         changeTodoListTitle={changeTodoListTitle}
-        />
+        return (
+            <Grid item key={tl.id}>
+                <Paper elevation={10} style={{padding: "20px"}}>
+                    <TodoList todoListID={tl.id}
+                              title={tl.title}
+                              filter={tl.filter}
+                              tasks={tasksForTodoList}
+                              addTask={addTask}
+                              removeTask={removeTask}
+                              changeTodoListFilter={changeTodoListFilter}
+                              changeTaskStatus={changeTaskStatus}
+                              removeTodoList={removeTodoList}
+                              changeTaskTitle={changeTaskTitle}
+                              changeTodoListTitle={changeTodoListTitle}
+                    />
+                </Paper>
+            </Grid>
 
-    } )
+        )
+    })
 
     //UI:
     //CRUD - Create Read Update Delete
     return (
         <div className="App">
-            <AddItemForm addItem={addTodoList}/>
-            {todoListComponents}
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton edge={"start"} color={"inherit"} aria-label="menu">
+                        <Menu/>
+                    </IconButton>
+                    <Typography variant={"h6"}>
+                        News
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container fixed>
+                <Grid container style={{padding: "40px 0 40px"}}>
+                    <AddItemForm addItem={addTodoList}/>
+                </Grid>
+                <Grid container spacing={4}>
+                    {todoListComponents}
+                </Grid>
+                {/*<AddItemForm addItem={addTodoList}/>*/}
+                {/*{todoListComponents}*/}
+            </Container>
         </div>
     );
 }
