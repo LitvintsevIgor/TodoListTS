@@ -24,27 +24,47 @@ type ChangeTodoListTFilterActionType = {
     id: string
 }
 
+let initialState: TodoListType[] = []
+
 export type  ActionType = RemoveTodoListActionType | AddTodoListActionType | ChangeTodoListTitleActionType | ChangeTodoListTFilterActionType
 
-export const todoListReducer = (todoLists: TodoListType[], action: ActionType) => {
+export const todoListReducer = (todoLists = initialState, action: ActionType): TodoListType[] => {
     switch (action.type) {
         case "REMOVE-TODOLIST":
             return todoLists.filter(tl => tl.id !== action.id)
         case "ADD-TODOLIST":
             return [...todoLists, {id: action.todoListId, title: action.title, filter: "all"}]
-        case "CHANGE-TODOLIST-TITLE":
-            const todoList = todoLists.find(t => t.id === action.id)
-            if (todoList) {
-                todoList.title = action.newTitle
-                return [...todoLists]
-            }
-            return  todoLists
+        case "CHANGE-TODOLIST-TITLE": {
+            // const todoList = todoLists.find(t => t.id === action.id)
+            // if (todoList) {
+            //     todoList.title = action.newTitle
+            //     return [...todoLists]
+            // }
+            // return  todoLists
+            return todoLists.map(todo => {
+                if(todo.id === action.id) {
+                    return {...todo, title: action.newTitle}
+                } else {
+                    return  todo
+                }
+            })
+        }
+
         case "CHANGE-TODOLIST-FILTER": {
-            const todoList = todoLists.find(t => t.id === action.id)
-            if (todoList) {
-                todoList.filter = action.filter
-                return [...todoLists]
-            }
+            // const todoList = todoLists.find(t => t.id === action.id)
+            // if (todoList) {
+            //     todoList.filter = action.filter
+            //     return [...todoLists]
+            // }
+            //
+            // return todoLists
+            return todoLists.map(todo => {
+                if(todo.id === action.id) {
+                    return {...todo, filter: action.filter}
+                } else {
+                    return  todo
+                }
+            })
         }
         default:
             return todoLists
