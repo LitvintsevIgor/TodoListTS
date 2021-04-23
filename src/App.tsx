@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import TodoList from "./TodoList";
+import {TodoList} from "./TodoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";

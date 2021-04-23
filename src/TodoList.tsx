@@ -1,4 +1,4 @@
-import React, {useState, KeyboardEvent, ChangeEvent} from "react";
+import React, {useState, KeyboardEvent, ChangeEvent, useCallback} from "react";
 import {FilterValuesType, TaskType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -7,6 +7,7 @@ import {Delete} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
 import {TodoListType} from "./AppWithRedux";
+import {log} from "util";
 
 
 type TodoListPropsType = {
@@ -23,31 +24,40 @@ type TodoListPropsType = {
     changeTodoListTitle: (newTitle: string, todoListID: string) => void
 }
 
-function TodoList(props: TodoListPropsType) {
+export const TodoList = React.memo((props: TodoListPropsType) => {
+    console.log("Todolist called")
 
-    // let todo = useSelector<AppRootStateType, TodoListType>( state => {
-    //     return state.todolists.filter(todo => todo.id === props.todoListID) [0]
-    // })
-    //
-    // let dispatch = useDispatch()
+    const addTask = useCallback((title: string) => props.addTask(title, props.todoListID), [])
 
-    const addTask = (title: string) => props.addTask(title, props.todoListID)
-    const setAllFilter = () => {
+    const setAllFilter = useCallback(() => {
         props.changeTodoListFilter("all", props.todoListID)
-    }
-    const setAсtiveFilter = () => {
+    }, [])
+    const setAсtiveFilter = useCallback(() => {
         props.changeTodoListFilter("active", props.todoListID)
-    }
-    const setCompletedFilter = () => {
+    }, [])
+    const setCompletedFilter = useCallback(() => {
         props.changeTodoListFilter("completed", props.todoListID)
-    }
+    }, [])
+
+
     const removeTodoList = () => {
         props.removeTodoList(props.todoListID)
     }
     const changeTodoListTitle = (title: string) => {
         props.changeTodoListTitle(title, props.todoListID)
     }
-    const tasks = props.tasks.map((t) => {
+
+
+    let allTodoListTasks = props.tasks;
+    let tasksForTodoList = allTodoListTasks;
+    if (props.filter === "active") {
+        tasksForTodoList = allTodoListTasks.filter(t => t.isDone === false)
+    }
+    if (props.filter === "completed") {
+        tasksForTodoList = allTodoListTasks.filter(t => t.isDone === true)
+    }
+
+    const tasks = tasksForTodoList.map((t) => {
 
         const removeTask = () => {
             props.removeTask(t.id, props.todoListID)
@@ -74,6 +84,7 @@ function TodoList(props: TodoListPropsType) {
             </li>
         )
     })
+
     return (
         <div>
             <h3>
@@ -108,6 +119,6 @@ function TodoList(props: TodoListPropsType) {
             </div>
         </div>
     )
-}
+})
 
-export default TodoList;
+// export default TodoList;
