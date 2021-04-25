@@ -74,12 +74,12 @@ function AppWithRedux() {
         // мы сначала изменили данные (объект tasks), а потом просто кидаем его копию функции setTasks, чтобы она как бы сказала "о, мне дали"
         // какой-то новый массив, дайка я запущу перерисовку, а если мы передали бы просто {tasks}, без трех точек, то перерисовка бы не запустилась
         // так как setTasks подумал бы, чтобы раз объект тот же, значит нихрена не изменилось
-    }, [])
+    }, [dispatch])
 
     const addTask = useCallback((title: string, todoListID: string) => {
         let action = addTaskAС(title, todoListID)
         dispatch(action)
-    }, [])
+    }, [dispatch])
 
     const changeTaskStatus = useCallback((taskD: string, newIsDoneValue: boolean, todoListID: string) => {
         let action = changeTaskStatusAС(taskD, newIsDoneValue, todoListID)
@@ -92,7 +92,7 @@ function AppWithRedux() {
         //     task.isDone = newIsDoneValue
         //     setTasks({...tasks})
         // }
-    }, [])
+    }, [dispatch])
 
     const changeTaskTitle = useCallback((taskID: string, newTitle: string, todoListID: string) => {
         let action = changeTaskTitleAС(taskID, newTitle, todoListID)
@@ -105,7 +105,7 @@ function AppWithRedux() {
         //     task.title = newTitle
         //     setTasks({...tasks})
         // }
-    }, [])
+    }, [dispatch])
 
     const changeTodoListFilter = useCallback((newFilterValue: FilterValuesType, todoListID: string) => {
         let action = ChangeTodoListTFilterAC(newFilterValue, todoListID)
@@ -117,7 +117,7 @@ function AppWithRedux() {
         //     setTodoLists([...todoLists])
         // }
 
-    }, [])
+    }, [dispatch])
 
     const changeTodoListTitle = useCallback((newTitle: string, todoListID: string) => {
         let action = ChangeTodoListTitleAC(newTitle, todoListID)
@@ -129,7 +129,7 @@ function AppWithRedux() {
         //     setTodoLists([...todoLists])
         // }
 
-    }, [])
+    }, [dispatch])
 
     const removeTodoList = useCallback((todoListID: string) => {
         let action = RemoveTodoListAC(todoListID)
@@ -138,12 +138,12 @@ function AppWithRedux() {
 
         // setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
         // delete tasks[todoListID]
-    }, [])
+    }, [dispatch])
 
     const addTodoList = useCallback((title: string) => {
         let action = AddTodoListAС(title)
         dispatch(action)
-    }, [])
+    }, [dispatch])
 
 
     const todoListComponents = todoLists.map((tl) => {
