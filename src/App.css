@@ -1,26 +1,26 @@
-/*.App {*/
-/*  padding: 30px;*/
-/*  display: flex;*/
-/*}*/
+/*
+.App {
+  padding: 30px;
+  display: flex;
+}
 
-/*.App > div {*/
-/*  margin-right: 50px;*/
-/*}*/
+.App > div {
+  margin-right: 50px;
+}
 
-/*.is-done {*/
-/*  opacity: 0.35;*/
-/*  text-decoration: line-through;*/
-/*}*/
+.error {
+  border: red 1px solid;
+}
 
-/*.active {*/
-/*  background-color: #a3ff12;*/
-/*}*/
+.error-message {
+  color: red;
+}
 
-/*.error {*/
-/*  border: 2px solid red;*/
-/*  outline: transparent;*/
-/*}*/
+.active-filter {
+  background-color: aquamarine;
+}
 
-/*.error-message {*/
-/*  color: red;*/
-/*}*/
+.is-done {
+  opacity: 0.5;
+}
+*/
