@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import {authAPI} from "../api/todolists-api";
-import {setIsLoggedInAC} from "../features/Login/auth-redicer";
+import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState = {
@@ -33,7 +33,6 @@ export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     authAPI.me()
         .then(res => {
-            debugger
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC({value: true}));
             } else {

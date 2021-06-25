@@ -10,7 +10,7 @@ import {initializeAppTC, RequestStatusType} from './app-reducer'
 import {Login} from "../features/Login/Login";
 import {Redirect, Route, Switch } from 'react-router-dom'
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress'
-import {logoutTC} from "../features/Login/auth-redicer";
+import {logoutTC} from "../features/Login/auth-reducer";
 
 type PropsType = {
     demo?: boolean
